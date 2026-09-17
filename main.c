@@ -8,13 +8,24 @@ HANDLE hConsoleOut;
 void initConsole();
 void drawAt(int x, int y, const char* str);
 
-
 void initStage();
-
+#define EMPTY 0
+#define WALL 1
+#define BLOCK 2
+int stageInfo[STAGE_HEIGHT+1][STAGE_WIDTH+2] = {EMPTY,}; // stageInfo[y][x]: stage 상태 관리 배열
+void debugStage() {
+    for (int y = 0; y < STAGE_HEIGHT+1; y++) {
+        drawAt(2*STAGE_WIDTH+3, y, "");
+        for (int x = 0; x < STAGE_WIDTH+2; x++) {
+            printf("%d", stageInfo[y][x]);
+        }
+    }
+}
 int main() {
     initConsole();
     initStage();
-        Sleep(5000);
+        debugStage();
+                Sleep(5000);
 
 }
 // Console의 handle을 얻고, cursor를 비가시화한다.
@@ -30,23 +41,29 @@ void initConsole() {
     GetConsoleCursorInfo(hConsoleOut, &curCursorInfo);
     curCursorInfo.bVisible = 0;
     SetConsoleCursorInfo(hConsoleOut, &curCursorInfo);
-
 }
 // Console 상 위치 pos에 str을 그린다.
 void drawAt(int x, int y, const char* str) {
     SetConsoleCursorPosition(hConsoleOut, (COORD){x,y});
     printf(str);
 }
-// STAGE_WIDTH/HEIGHT 크기의 맵을 그린다.
-// stageInfo는 x 한 칸을 1의 크기로, rendering 시에는 한 칸을 2의 크기로 만든다.
+// Console 상에 STAGE_WIDTH/HEIGHT 크기의 맵을 그리고 stageInfo에 반영.
 void initStage() {
     // "██" 블록 랜더링용 text
-    for (int i = 0; i < STAGE_HEIGHT+1; i++) {
+    for (int i = 0; i < STAGE_HEIGHT; i++) {
         drawAt(0, i, "│");
         drawAt(1+2*STAGE_WIDTH, i, "│");
+        stageInfo[i][0] = WALL;
+        stageInfo[i][1+STAGE_WIDTH] = WALL;
     }
-    drawAt(0, STAGE_HEIGHT+1, "└");
-    for (int i = 1; i <= 2*STAGE_WIDTH; i++)    // block 개수 * 2
-        drawAt(i, STAGE_HEIGHT+1, "─");
+    drawAt(0, STAGE_HEIGHT, "└");
+    stageInfo[STAGE_HEIGHT][0] = WALL;
+    // stageInfo는 x 한 칸을 1의 크기로,
+    // Console 상에 rendering 시에는 한 칸을 2의 크기로 만든다.
+    for (int i = 1; i <= STAGE_WIDTH; i++) {    // block 개수 * 2
+        drawAt(2*i-1, STAGE_HEIGHT, "──");
+        stageInfo[STAGE_HEIGHT][i] = WALL;
+    }
     printf("┘");
+    stageInfo[STAGE_HEIGHT][STAGE_WIDTH+1] = WALL;
 }
