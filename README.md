@@ -18,13 +18,13 @@ The main goals are to:
 
 ## Current Progress
 
-**Current phase:** Phase 1 — Console & Stage
+**Current phase:** Phase 3 - player control
 
 Currently working on:
-> rendering active blocks
+> Move block left and right
 
 Next:
-> Phase 3 — Player Control
+> Phase 3 — soft drop
 
 ## Controls
 
@@ -48,9 +48,9 @@ Next:
 
 ### Phase 2 — Tetromino System
 - [x] Define tetromino shapes using 4×4 matrices
-- [ ] Store active block position
-- [ ] Store active block type and rotation
-- [ ] Render the active block
+- [x] Store active block position
+- [x] Store active block type and rotation
+- [x] Render the active block
 
 ### Phase 3 — Player Control
 - [ ] Move block left and right
