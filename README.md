@@ -21,10 +21,10 @@ The main goals are to:
 **Current phase:** Phase 1 — Console & Stage
 
 Currently working on:
-> Creating the logical board representation (`stageInfo`).
+> rendering active blocks
 
 Next:
-> Define tetromino shapes using a unified 4×4 representation.
+> Phase 3 — Player Control
 
 ## Controls
 
@@ -43,11 +43,11 @@ Next:
 - [x] Hide console cursor
 - [x] Enable UTF-8 output
 - [x] Draw the game stage
-- [✔️] Create `stageInfo` board representation
-- [ ] Initialize walls and empty cells
+- [x] Create `stageInfo` board representation
+- [x] Initialize walls and empty cells
 
 ### Phase 2 — Tetromino System
-- [ ] Define tetromino shapes using 4×4 matrices
+- [x] Define tetromino shapes using 4×4 matrices
 - [ ] Store active block position
 - [ ] Store active block type and rotation
 - [ ] Render the active block
