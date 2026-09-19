@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
+#include "block.c"
+#include <time.h>
 // 맵 크기 변수
 #define STAGE_WIDTH 10
 #define STAGE_HEIGHT 20
@@ -21,12 +23,25 @@ void debugStage() {
         }
     }
 }
+
+typedef struct {
+    int idx;
+    int x;
+    int y;
+} ActiveBlock;
+void drawBlock(ActiveBlock* curBlock);
+void spawnBlock(ActiveBlock *curBlock);
+
 int main() {
+    srand(time(NULL));
     initConsole();
     initStage();
         debugStage();
-                Sleep(5000);
 
+    ActiveBlock block;
+    spawnBlock(&block);
+    drawBlock(&block);
+                Sleep(5000);
 }
 // Console의 handle을 얻고, cursor를 비가시화한다.
 void initConsole() {
@@ -42,14 +57,13 @@ void initConsole() {
     curCursorInfo.bVisible = 0;
     SetConsoleCursorInfo(hConsoleOut, &curCursorInfo);
 }
-// Console 상 위치 pos에 str을 그린다.
+// Console 상 위치 (x,y)에 str을 그린다.
 void drawAt(int x, int y, const char* str) {
     SetConsoleCursorPosition(hConsoleOut, (COORD){x,y});
     printf(str);
 }
 // Console 상에 STAGE_WIDTH/HEIGHT 크기의 맵을 그리고 stageInfo에 반영.
 void initStage() {
-    // "██" 블록 랜더링용 text
     for (int i = 0; i < STAGE_HEIGHT; i++) {
         drawAt(0, i, "│");
         drawAt(1+2*STAGE_WIDTH, i, "│");
@@ -66,4 +80,17 @@ void initStage() {
     }
     printf("┘");
     stageInfo[STAGE_HEIGHT][STAGE_WIDTH+1] = WALL;
+}
+void drawBlock(ActiveBlock* curBlock) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (blockModel[curBlock->idx][i][j] == 1)
+                drawAt(2*(curBlock->x+j), curBlock->y+i, "██");
+        }
+    }
+}
+void spawnBlock(ActiveBlock *curBlock) {
+    curBlock->idx = 4*(rand() % 7);
+    curBlock->x = STAGE_WIDTH/2-1;
+    curBlock->y = 0;
 }
